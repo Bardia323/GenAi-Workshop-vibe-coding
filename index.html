@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ancient Chinese Wisdom Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Overall page styling */
+        body {
+            background-color: #0a0a0a; 
+            background-image: url('https://www.transparenttextures.com/patterns/rice-paper-3.png');
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Crimson Pro', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #d9c7a0;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #d4af37; /* Gold color */
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+            color: #a08a5c;
+            letter-spacing: 1px;
+        }
+
+        /* Container for the slideshow with decorative border */
+        .slideshow-container {
+            max-width: 700px;
+            position: relative;
+            margin: 30px auto;
+            background-color: #121212;
+            padding: 25px;
+            border: 2px solid #d4af37; /* Gold border */
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+
+        /* Chinese-style decorative corners */
+        .slideshow-container::before,
+        .slideshow-container::after,
+        .corner-top-right,
+        .corner-bottom-left {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><path d="M0,0 L30,0 L30,5 L5,5 L5,30 L0,30 Z" fill="%23d4af37"/></svg>');
+            background-size: cover;
+        }
+
+        .slideshow-container::before {
+            top: -2px;
+            left: -2px;
+            transform: rotate(0deg);
+        }
+
+        .slideshow-container::after {
+            bottom: -2px;
+            right: -2px;
+            transform: rotate(180deg);
+        }
+
+        .corner-top-right {
+            top: -2px;
+            right: -2px;
+            transform: rotate(90deg);
+        }
+
+        .corner-bottom-left {
+            bottom: -2px;
+            left: -2px;
+            transform: rotate(270deg);
+        }
+
+        /* Hide all slides by default */
+        .slide {
+            display: none;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Ensure the image fits with a stylish border */
+        .slide img {
+            width: 100%;
+            height: auto;
+            border: 3px solid #8b7346; /* Antique gold border */
+            box-shadow: 0 0 15px rgba(139, 115, 70, 0.3); /* Subtle glow */
+        }
+
+        /* Arrows for navigation */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -30px;
+            padding: 16px;
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 24px;
+            transition: 0.3s ease;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffd700;
+        }
+
+        /* Chinese-inspired navigation dots */
+        .dot-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 10px;
+            background-color: #594827;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: rotate(45deg); /* Diamond shape */
+            border: 1px solid #8b7346;
+        }
+
+        .dot:hover {
+            background-color: #8b7346;
+            box-shadow: 0 0 8px rgba(139, 115, 70, 0.6);
+        }
+
+        .active {
+            background-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Poem styling with scroll-like appearance */
+        .poem-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .poem-scroll {
+            position: relative;
+            background-color: #1a1409;
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            padding: 30px 40px;
+            border-radius: 2px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #8b7346;
+            border-right: 4px solid #8b7346;
+            margin: 10px 0;
+        }
+
+        .poem-scroll::before,
+        .poem-scroll::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background-color: #8b7346;
+        }
+
+        .poem-scroll::before {
+            top: 0;
+            border-bottom: 2px solid #42341d;
+        }
+
+        .poem-scroll::after {
+            bottom: 0;
+            border-top: 2px solid #42341d;
+        }
+
+        .poem {
+            text-align: center;
+            font-size: 20px;
+            color: #d9c7a0;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+        }
+
+        .poem-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #d4af37;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .chinese-text {
+            font-family: 'SimSun', 'FangSong', serif;
+            font-size: 18px;
+            color: #a08a5c;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Red seal stamp */
+        .seal {
+            width: 60px;
+            height: 60px;
+            background-color: #7e2811;
+            color: #f7e9c3;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'SimSun', 'FangSong', serif;
+            font-size: 16px;
+            margin: -20px auto 0;
+            transform: rotate(15deg);
+            box-shadow: 0 0 10px rgba(126, 40, 17, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .seal-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: -5px;
+        }
+
+        /* Fade animation for slides */
+        .fade {
+            animation: fade 1.5s ease-in-out;
+        }
+
+        @keyframes fade {
+            from {opacity: 0.4}
+            to {opacity: 1}
+        }
+
+        /* Ink brush stroke animation for title */
+        @keyframes brushStroke {
+            0% {width: 0; opacity: 0;}
+            100% {width: 100%; opacity: 1;}
+        }
+
+        .brush-stroke {
+            height: 3px;
+            background-color: #d4af37;
+            margin: 0 auto 30px;
+            width: 0;
+            animation: brushStroke 1.5s forwards ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Title -->
+    <h1 class="page-title">古代智慧的回響</h1>
+    <div class="subtitle">Echoes of Ancient Wisdom</div>
+    <div class="brush-stroke"></div>
+    
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+        <div class="corner-top-right"></div>
+        <div class="corner-bottom-left"></div>
+        
+        <!-- Slide 1 -->
+        <div class="slide fade">
+            <img src="1.png.jpeg" alt="Ancient Chinese Landscape">
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide fade">
+            <img src="2.png.jpeg" alt="Chinese Calligraphy">
+        </div>
+        <!-- Slide 3 -->
+        <div class="slide fade">
+            <img src="3.png.jpeg" alt="Chinese Tea Ceremony">
+        </div>
+        
+        <!-- Navigation arrows -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <!-- Dots for navigation -->
+    <div class="dot-container">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+
+    <!-- Poem in scroll-like container -->
+    <div class="poem-container">
+        <div class="poem-scroll">
+            <div class="poem">
+                <div class="poem-title">Silent Wisdom</div>
+                In ancient halls where wisdom dwells,<br>
+                A spilled cup whispers life's own spells,<br>
+                Through time, we learn what silence tells.
+                <div class="chinese-text">
+                    智慧居於古老殿堂，<br>
+                    溢出的杯子訴說生命的咒語，<br>
+                    歲月流轉，我們學會聆聽寂靜。
+                </div>
+            </div>
+        </div>
+        <div class="seal">
+            <span class="seal-text">真理</span>
+        </div>
+    </div>
+
+    <!-- JavaScript for slideshow functionality -->
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Function to advance slides
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Function to show a specific slide
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        // Function to display slides
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("slide");
+            let dots = document.getElementsByClassName("dot");
+
+            // Reset slide index if it exceeds the number of slides
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+
+            // Hide all slides
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+
+            // Remove active class from all dots
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            // Show the current slide and mark the corresponding dot as active
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+
+        // Auto-rotate slides every 5 seconds
+        setInterval(function() {
+            plusSlides(1);
+        }, 5000);
+    </script>
+</body>
+</html>
